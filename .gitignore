@@ -12,3 +12,4 @@
 !/SoundCodec/test/sample10_16k.wav
 
 __pycache__/
+exps/*
