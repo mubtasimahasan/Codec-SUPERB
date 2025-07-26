@@ -1,13 +1,34 @@
 #!/bin/bash
 
+# ----- Default values -----
 category=$1 # speech / audio
-dataset=$2 # librispeech ... / esc50 ...
+dataset=$2  # librispeech ... / esc50 ...
+ref_path=/teamspace/studios/this_studio/data/samples
+syn_path=/teamspace/studios/this_studio/resynth/samples
+outdir=exps/logs
+result_log=exps
 
-syn_path=/syn/path/samples/${dataset}
-ref_path=/ref/path/samples/${dataset}
-outdir=exps/logs/${dataset}
+# ----- Command-line overrides -----
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --category) category="$2"; shift ;;
+        --dataset) dataset="$2"; shift ;;
+        --syn_path) syn_path="$2"; shift ;;
+        --ref_path) ref_path="$2"; shift ;;
+        --outdir) outdir="$2"; shift ;;
+        --result_log) result_log="$2"; shift ;;
+    esac
+    shift
+done
+
+# ----- Append dataset to paths -----
+syn_path="${syn_path}/${dataset}"
+ref_path="${ref_path}/${dataset}"
+outdir="${outdir}/${dataset}"
+result_log="${result_log}/${dataset}.log"
+
+
 mkdir -p $outdir
-result_log=exps/${dataset}.log
 
 echo "Codec SUPERB objective metric evaluation on ${dataset}" | tee ${result_log}
 

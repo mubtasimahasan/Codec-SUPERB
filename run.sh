@@ -1,10 +1,23 @@
 #!/bin/bash
 
-stage=4
-
-syn_path=/syn/path
-ref_path=/ref/path
+# Default values
+stage=0
+ref_path=../data
+syn_path=../resynth
 outdir=exps
+
+# Parse command-line arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --stage) stage="$2"; shift ;;
+        --syn_path) syn_path="$2"; shift ;;
+        --ref_path) ref_path="$2"; shift ;;
+        --outdir) outdir="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 result_log=$outdir/results.txt
 mkdir -p ${outdir}/logs
 
@@ -12,7 +25,7 @@ if [ ! -f ${result_log} ]; then
     echo "Codec SUPERB application evaluation" | tee ${result_log}
 fi
 
-if [ $stage -eq 1 ]; then
+if [ $stage -eq 0 ] || [ $stage -eq 1 ]; then
 
     echo -e "\nStage 1: Run speech emotion recognition." | tee -a $result_log
     model_type='iic/emotion2vec_base_finetuned'
@@ -33,7 +46,7 @@ if [ $stage -eq 1 ]; then
 
 fi
 
-if [ $stage -eq 2 ]; then
+if [ $stage -eq 0 ] || [ $stage -eq 2 ]; then
 
     echo -e "\nStage 2: Run speaker related evaluation." | tee -a $result_log
     if [ ! -f "src/ASV/veri_test2.txt" ]; then
@@ -71,7 +84,7 @@ if [ $stage -eq 2 ]; then
 
 fi
 
-if [ $stage -eq 3 ]; then
+if [ $stage -eq 0 ] || [ $stage -eq 3 ]; then
 
     echo -e "\nStage 3: Run automatic speech recognition." | tee -a $result_log
 
@@ -90,7 +103,7 @@ if [ $stage -eq 3 ]; then
 
 fi
 
-if [ $stage -eq 4 ]; then
+if [ $stage -eq 0 ] || [ $stage -eq 4 ]; then
 
     echo -e "\nStage 4: Run audio event classification." | tee -a $result_log
 

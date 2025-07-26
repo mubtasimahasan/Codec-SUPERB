@@ -12,7 +12,7 @@ from torch.utils.data import Dataset
 from torchvision.datasets.utils import download_url
 from tqdm import tqdm
 
-from CLAP.msclap import CLAP
+from msclap import CLAP
 
 
 class AudioDataset(Dataset):
